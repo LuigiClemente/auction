@@ -30,6 +30,47 @@ Lots(Lots) --> Bidding(Bidding)
 
 ```
 
+**Reusable Features:**
+
+1. **User Authentication and Permissions:** The existing user authentication and permission mechanisms can be reused to ensure secure access to the auction platform.
+    
+2. **Database Management:** The database structure for managing users, products, and transactions can be retained with some modifications to accommodate auctions and lots.
+    
+3. **Product Management:** The product management system can be reused to list and display auction items (lots).
+    
+4. **Payment Processing:** The payment processing system can be reused to handle payments for winning bids and fees.
+    
+5. **Search Functionality:** The search functionality can be adapted to search for auctions and lots based on keywords, categories, or other relevant criteria.
+    
+6. **User Profiles:** Existing user profiles can be expanded to include auction-related information such as bidding history and current auctions.
+    
+7. **Notifications:** The notification system can be extended to notify users about auction status, bid updates, and auction outcomes.
+    
+8. **Multilingual Support:** If the platform already supports multiple languages, this feature can be reused for auction descriptions and details.
+    
+9. **Reporting and Analytics:** Reporting and analytics tools can be adapted to provide insights into auction performance, user behavior, and revenue.
+
+10. **Search and Filtering:** Enhance the search functionality to allow users to find specific auctions or lots based on various criteria such as category, price range, and auction type.
+    
+
+**New Features for Auction Platform:**
+
+1. **Auction Creation:** Implement a feature for users to create new auctions, specifying details like auction duration, starting bid, reserve price, and auction type (e.g., standard, reserve, sealed bid).
+    
+2. **Lot Management:** Develop a system for users to create and manage individual lots within auctions, including lot descriptions, images, and starting prices.
+    
+3. **Bidding System:** Create a bidding mechanism that allows users to place bids on lots, with real-time updates on current bid amounts.
+    
+4. **Auction Countdown:** Implement a countdown timer for each auction lot to create a sense of urgency among bidders.
+    
+5. **Bid Increment Rules:** Allow auction creators to set bid increment rules, determining how bids should increase during the auction.
+    
+6. **Auction Status Tracking:** Provide a way to track the status of auctions, including whether they are active, completed, or closed.
+    
+7. **Winning Bidder Determination:** Develop a mechanism to automatically determine the winning bidder for each lot at the end of the auction.
+    
+8. **Auction History:** Enable users to view past auction results, including winning bids and details of sold lots.
+    
 
 
 # MedusaJS Customization Documentation
