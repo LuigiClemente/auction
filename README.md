@@ -104,4 +104,4 @@ The MedusaJS Customization seamlessly integrates with MedusaJS's user management
     
 * **Authentication:** Users can register the app using the `register` mutation, providing authentication tokens and domain information. This ensures a secure connection between the MedusaJS Customization and MedusaJS.
     
-// Explain how we are transitioning from a store to an auction-based platform.
+
