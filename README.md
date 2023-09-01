@@ -401,3 +401,18 @@ flowchart TB
     W[Error Tracking] --> ALL
 
 ```
+
+
+https://docs.medusajs.com/development/cache/modules/redis
+
+https://docs.medusajs.com/plugins/search/meilisearch
+
+https://docs.medusajs.com/plugins/file-service/minio
+
+https://medusajs.com/plugins/medusa-plugin-sentry/
+
+https://medusajs.com/plugins/medusa-plugin-sentry-ui/
+
+https://medusajs.com/plugins/medusa-plugin-auth/
+
+
