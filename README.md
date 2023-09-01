@@ -349,6 +349,10 @@ Admin utilizes a file service plugin that enables sellers to upload images of th
 
 Admin implements a search feature using the MeiliSearch plugin. This empowers users to search for specific items or categories within the auction. The search functionality improves user navigation and helps participants find relevant lots quickly, enhancing their overall auction experience.
 
+### Redis Caching Plugin
+
+Redis improves the user experience.
+
 ## Error Tracking
 
 ### Sentry Plugins
