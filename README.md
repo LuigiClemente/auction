@@ -1,5 +1,3 @@
-
-
 # 1. Setting Up Auction Lots
 
 ## 1.1 Customizing the Product Entity
@@ -227,6 +225,30 @@ _Example_: As bidding for a valuable artwork progresses, administrators can dyna
 
 _Example_: If a buyer's maximum bid for a unique antique clock is $500, and another bidder places a $490 bid, the automated system will dynamically increase the buyer's bid to $500 to secure the lot, sparing them from manual intervention.
 
+### Dynamic Bid Limits
+
+The ability for administrators to configure dynamic maximum bid limits is crucial for maintaining a fair and controlled bidding environment. Here are some key points on implementing this advanced functionality:
+
+-   The maximum bid limit should be stored as a configurable property in the database for each auction lot. For example:
+
+<!---->
+
+```
+lot {
+  id: 123
+  name: "Antique Clock"
+  current_max_bid: 500
+}
+```
+
+-   When a bid is placed, the system should validate that the bid amount does not exceed the current maximum bid limit for that lot. If it does, the bid should be rejected.
+-   An API endpoint should allow administrators to adjust the maximum bid limit dynamically at any time during the auction. This allows adapting to changing market conditions.
+-   The system could implement bid increment logic that progressively increases the maximum bid limit based on algorithms factoring the current bid, number of bidders, estimated value, etc.
+-   Automated notifications should inform bidders when the maximum bid limit for a lot has been raised, allowing them to adjust their strategy accordingly.
+-   Analytics should provide administrators visibility into max bid adjustments across auctions to identify optimal settings.
+-   The dynamic bid limit mechanism should have sufficient testing and safeguards to prevent misconfiguration that could disrupt auction integrity.
+
+
 ```mermaid
 graph TB
     subgraph Auction Admin
@@ -439,9 +461,9 @@ To integrate the Marketing Campaign's snippet code into the frontend, all that's
 
 ## Enhanced Registration Features
 
-### Vendor Registration
+### Company Seller Registration
 
-Vendors joining our platform are required to provide specific company information:
+Company Sellers joining our platform are required to provide specific company information:
 
 * **Company Name**: [Company Name]
 * **Bank Account Number**: [Bank Account Number]
@@ -449,6 +471,53 @@ Vendors joining our platform are required to provide specific company informatio
 * **Postal Code**: [Postal Code]
 * **Street Address**: [Street Name & House Number]
 * **Government Approved ID**: [Upload ID]
+
+  ```javascript
+/**
+ * Seller Registration Schema
+ */
+const sellerSchema = {
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  taxId: { type: String, required: true }, // Business tax ID
+  companyName: { type: String, required: true },
+  companyAddress: {
+    type: Object,
+    required: true,
+    properties: {
+      street: { type: String, required: true },
+      city: { type: String, required: true },
+      state: { type: String, required: true },
+      zipCode: { type: String, required: true },
+      country: { type: String, required: true },
+    },
+  },
+};
+
+// Create a new seller account
+const newSellerData = {
+  firstName: "Jane",
+  lastName: "Doe",
+  email: "jane@company.com",
+  password: "qwerty123",
+  phoneNumber: "987-654-3210",
+  taxId: "12-3456789",
+  companyName: "My Company LLC",
+  companyAddress: {
+    street: "456 Business Ave",
+    city: "Business Town",
+    state: "Business State",
+    zipCode: "54321",
+    country: "Businessland",
+  },
+};
+
+const newSeller = await Seller.create(newSellerData);
+```
+
 
 ### Buyer Registration
 
@@ -459,6 +528,50 @@ Vendors joining our platform are required to provide specific company informatio
 * **Email**: [Email]
 * **Government Approved ID**: [Upload ID]
 
+```javascript
+/**
+ * Buyer Registration Schema
+ */
+const buyerSchema = {
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  dateOfBirth: { type: Date, required: true },
+  billingAddress: {
+    type: Object,
+    required: true,
+    properties: {
+      street: { type: String, required: true },
+      city: { type: String, required: true },
+      state: { type: String, required: true },
+      zipCode: { type: String, required: true },
+      country: { type: String, required: true },
+    },
+  },
+};
+
+// Create a new buyer account
+const newBuyerData = {
+  firstName: "John",
+  lastName: "Doe",
+  email: "john@doe.com",
+  password: "password123",
+  phoneNumber: "123-456-7890",
+  dateOfBirth: new Date("1990-01-01"),
+  billingAddress: {
+    street: "123 Main St",
+    city: "Cityville",
+    state: "Stateville",
+    zipCode: "12345",
+    country: "Countryland",
+  },
+};
+
+const newBuyer = await Buyer.create(newBuyerData);
+```
+
 ## Integration of Social Login
 
 To enhance user convenience, we've seamlessly integrated social login options. Users can now register or log in using their existing social media accounts, including Google, Facebook, or Linkedin. This integration streamlines the registration process and ensures a smooth onboarding experience.
@@ -468,6 +581,35 @@ To enhance user convenience, we've seamlessly integrated social login options. U
 * [ ]  Google
 * [ ]  Facebook
 * [ ]  Linkedin
+
+```javascript
+// Import required modules for Passport.js authentication strategies
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+
+// Configure Google OAuth strategy
+passport.use(new GoogleStrategy({
+    // Add your Google OAuth configuration here
+    // (e.g., clientID, clientSecret, callbackURL)
+  },
+  (accessToken, refreshToken, profile, done) => {
+    // Handle authentication and account creation logic for Google
+    // You may want to implement user registration or login here
+  }
+));
+
+// Configure Facebook OAuth strategy
+passport.use(new FacebookStrategy({
+    // Add your Facebook OAuth configuration here
+    // (e.g., clientID, clientSecret, callbackURL)
+  },
+  (accessToken, refreshToken, profile, done) => {
+    // Handle authentication and account creation logic for Facebook
+    // You may want to implement user registration or login here
+  }
+));
+```
 
 ### 5. How Did You Find Us?
 
@@ -593,9 +735,53 @@ Admin utilizes a file service plugin that enables sellers to upload images of th
 
 Admin implements a search feature using the MeiliSearch plugin. This empowers users to search for specific items or categories within the auction. The search functionality improves user navigation and helps participants find relevant lots quickly, enhancing their overall auction experience.
 
+```javascript
+// Initialize MeiliSearch
+const meiliSearch = new MeiliSearch({
+  host: 'http://meili:7700',
+  apiKey: 'masterKey',
+});
+
+// Create an index
+await meiliSearch.index('auctions').create();
+
+// Add documents
+await meiliSearch.index('auctions').addDocuments([
+  { id: '1', title: 'Antique Clock', description: 'Victorian-era antique clock' },
+  { id: '2', title: 'Dining Set', description: '8-person wooden dining set' },
+]);
+
+// Perform a search
+const results = await meiliSearch.index('auctions').search('vintage');
+
+// MeiliSearch offers fast and relevant search results, including typo-tolerance and faceted search, making it easy for buyers to find desired lots.
+```
+
 ### Redis Caching Plugin
 
 Redis improves the user experience.
+
+```javascript
+// Initialize Redis
+const redisClient = new Redis({
+  host: 'localhost',
+  port: 6379,
+});
+
+// Set cache key
+await redisClient.set('popular_auctions', JSON.stringify(auctions));
+
+// Get cached data
+const cachedAuctions = JSON.parse(await redisClient.get('popular_auctions'));
+
+// Cache auction lot details
+await redisClient.set(`auction_${auctionId}`, JSON.stringify(auction));
+
+// Retrieve data from the cache
+const auction = JSON.parse(await redisClient.get(`auction_${auctionId}`));
+
+// Caching auction data reduces database load and improves response times.
+```
 
 ## Error Tracking
 
@@ -608,35 +794,38 @@ Admin's meticulous management of these features and functionalities contributes 
 Once you have completed the registration process, you will be able to log in to your account to add and manage your cars, make counteroffers, and participate in auctions.
 
 ```mermaid
-graph TD
-    subgraph Auction Functionality
-        A[Auction Functionality] --> B[Live Auction]
-        B --> C[Presentation Order]
-        C --> D[Individual item focus]
-        B --> E[Inactivity Timeout]
-        E --> F[Prevents delays]
-    end
+flowchart TB
 
-    subgraph Image Upload
-        A --> G[Image Upload]
-        G --> H[File Service Plugin]
-        H --> I[Seller image upload]
-    end
+subgraph Buyer
+    direction TB
+    A[Browse Lots] --> B[View Details]
+    B --> C[Place Bid] --> D{Outbid?}
+    D -- Yes --> E[Get Notified]
+    E --> C
+    D -- No --> F[Confirm Purchase]     
+end
 
-    subgraph Search
-        A --> J[Search] 
-        J --> K[MeiliSearch Plugin]
-        K --> L[User search]
+subgraph Seller 
+    direction TB
+    G[List Item] --> H[Add Details] --> I[Upload Images]
+    I --> J[Lot Added to Auction] --> K[Review Bids]
+    K --> L{Accept Bid?} 
+    L -- Yes --> M[Confirm Sale]
+    L -- No --> N[Make Counteroffer] --> O[Receive Counter] 
+    O --> P{Accept Counter?}
+    P -- Yes --> M
+    P -- No --> Q[Make New Counter] --> K
+end
 
-        J --> M[Redis Caching]
-        M --> N[Performance]
-    end
+subgraph Delivery
+    M --> R[Request Delivery Quote]
+    F --> R
+end
 
-    subgraph Error Tracking
-        A --> O[Error Tracking]
-        O --> P[Sentry Plugins]
-        P --> Q[Issue monitoring]
-    end
+subgraph Integration
+    S[Integrated Search] --> T[Redis Caching]
+    U[Sentry Monitoring] --> ALL
+end
 ```
 
 ```mermaid
