@@ -15,7 +15,6 @@ In Medusa, the `Product` entity serves as the foundation for managing auction Lo
       // Add more custom attributes as required
     }
     ```
-    
 
 ## 1.2 Creating Options and Variants
 
@@ -32,6 +31,28 @@ Facilitate the addition of specific attribute values within each option. For exa
 ### Variants
 
 Enable administrators to construct variants for each Lot by combining option values. For instance, a Lot may feature variants like "Brand: Bentley," "Model: Mulsanne," "Color: Blue." The `ProductVariant` entity allows administrators to create new variants dynamically, adapting to the unique characteristics of each Lot.
+
+```mermaid
+graph TD
+    subgraph Product
+        A[Product] -->|metadata| B[auctionStartDate<br/>minimumBidAmount<br/>etc]
+        A -->|options| C[ProductOption]
+        C -->|values| D[ProductOptionValue]
+        C --> E[Brand]
+        D --> F[Bentley]
+        E --> F
+        C --> G[Model] 
+        D --> H[Mulsanne]
+        G --> H
+        C --> I[Color]
+        D --> J[Blue]
+        I --> J
+    end
+
+    subgraph ProductVariant
+        F & H & J --> K[ProductVariant]
+    end
+```
 
 # 2. Configuring Auction Lot Attributes
 
@@ -67,6 +88,22 @@ prices = [
   // Add more pricing options as needed
 ]
 ```
+```mermaid
+graph TD
+    subgraph Product
+        A[Product] --> |metadata| B[License Plate<br/>APK Expiry Date<br/>NAP Status<br/>etc]
+    end
+
+    subgraph Pricing
+        C[Pricing] -.-> B
+        C --> D[Currency Code]
+        D --> E[USD]
+        D --> H[EUR]
+        C --> F[Amount]
+        F --> G[10,000]
+        F --> I[8,500]
+    end
+```
 
 # 3. Displaying Auction Lots
 
@@ -90,6 +127,36 @@ Beyond a certain threshold, such as surpassing £5,000, administrators have the 
 
 It's essential to emphasize that administrators can fine-tune these settings, introduce additional brackets for different value ranges, and specify precise increment amounts as necessary. The overarching goal is to optimize the bid structure, ensuring that bids progress in a manner that fosters competitive bidding among participants while upholding fairness and transparency in the auction process.
 
+```mermaid
+graph TD
+    subgraph Auction System
+        A[Auction System] --> B[Lot Metadata]
+    end
+
+    subgraph Lot Metadata
+        B --> C[License Plate]
+        B --> D[APK Expiry Date]
+        B --> E[NAP Status]
+    end
+
+    subgraph Pricing and Bidding
+        A --> F[Pricing and Bidding]
+    end
+
+    subgraph Currency Code
+        F --> G[Currency Code]
+    end
+
+    subgraph Amount
+        G --> H[USD]
+        G --> I[EUR]
+    end
+
+    H --> J[Amount]
+    I --> K[Amount]
+```
+
+
 # 4. Dynamic Maximum Bid Configuration
 
 In the realm of auction management, the dynamic configuration of maximum bids is pivotal for fostering a fair and controlled bidding environment. Here's an in-depth look at how administrators dynamically manage maximum bids:
@@ -105,6 +172,36 @@ _Example_: As bidding for a valuable artwork progresses, administrators can dyna
 **Automated Bidding**: When competing bids reach or exceed a buyer's predefined maximum bid, automated bidding mechanisms spring into action. These systems dynamically place incremental bids on behalf of the buyer, striving to maintain their competitive edge up to their specified limit. This feature safeguards against buyers losing out on desirable lots due to last-minute manual bidding and permits real-time adjustments.
 
 _Example_: If a buyer's maximum bid for a unique antique clock is $500, and another bidder places a $490 bid, the automated system will dynamically increase the buyer's bid to $500 to secure the lot, sparing them from manual intervention.
+
+```mermaid
+graph TB
+    subgraph Auction Admin
+        A[Auction Admin] --> B{Set Max Bid Limit}
+    end
+
+    subgraph Set Max Bid Limit
+        B --> C[Per Lot]
+        C --> D[Based on Lot Value]
+
+        B --> E[Progressive Adjustment]
+        E --> F[Align with Lot Value]
+        E --> G[Allow Competitive Bidding]
+
+        B --> H[Automated Bidding]
+        H --> I[Incremental Bids]
+        H --> J[Up to Max Bid]
+    end
+
+    subgraph Buyer
+        A --> K[Buyer]
+    end
+
+    subgraph Specify Max Bid
+        K --> L[Specify Max Bid]
+        L --> M[Automatic Bidding]
+        M --> N[Up to Max Bid]
+    end
+```
 
 # 5. Bidding Process: A Structured and Transparent Approach
 
@@ -123,6 +220,37 @@ Admin introduces a dynamic element into the bidding process known as "counter-bi
 2. **Buyer's Response: Stay, Accept, or Counter Counter-Offer:** If the seller proposes a counter offer, the buyer receives it and faces three choices. They can decide to "stay," meaning they are content with the counter offer and accept it, finalizing the transaction. Alternatively, they may "accept" the counter offer without further negotiation. However, if the counter offer doesn't align with their budget or preferences, they can initiate a "counter counter-offer," suggesting a different price that they are willing to pay.
     
 3. **Admin-Defined Interaction Limits:** Admin can establish predefined limits on the number of interactions allowed in the negotiation process. For instance, they may set a limit of two interactions for each party. This means that the seller and buyer have a maximum of two rounds of negotiation. After the second unsuccessful attempt by each party, further negotiations are automatically canceled.
+
+```mermaid
+graph TD
+    subgraph Admin
+        A[Admin] --> B[Set Reserve Price]
+    end
+
+    subgraph Set Reserve Price
+        B --> C[Minimum Bid Amount]
+    end
+
+    subgraph Allow Counter Bidding
+        A --> D[Allow Counter Bidding]
+        D --> E{Seller Receives Highest Bid}
+        E --> F[Accept Bid]
+        E --> G[Counter Offer]
+        E --> H[Decline Bid]
+    end
+
+    subgraph Counter Offer
+        G --> I{Buyer Receives Counter}
+        I --> J[Accept Counter]
+        I --> K[Counter Counter Offer]
+        I --> L[Stay at Counter Price]
+    end
+
+    subgraph Limit Interactions
+        A --> M[Limit Interactions]
+        M --> N[E.g. 2 Rounds Each]
+    end
+```
 
 # 6. Dynamic Sale Information Management
 
@@ -144,6 +272,23 @@ _Example_: For a charity auction, administrators can dynamically name the event 
 
 _Example_: A countdown timer dynamically adjusts to indicate the minutes and seconds remaining until the auction starts, allowing participants to join at the right moment.
 
+```mermaid
+graph TD
+    subgraph Dynamic Sale Information
+        A[Dynamic Sale Information] --> B[Location]
+        B --> C[Update for<br/>venue changes]
+        
+        A --> D[Date and Time]
+        D --> E[Adjust in<br/>real-time]
+        
+        A --> F[Naming]
+        F --> G[Unique names<br/>for each sale]
+        
+        A --> H[Countdown Timer]
+        H --> I[Real-time<br/>remaining time]
+    end
+```
+
 # 7. Dynamic Delivery Quote System
 
 Admin's implementation of a dynamic delivery quote system plays a crucial role in elevating the convenience and accessibility of the auction platform. Here's an in-depth explanation of how this system operates:
@@ -155,6 +300,24 @@ Admin's implementation of a dynamic delivery quote system plays a crucial role i
 **Location-Based Pricing**: The delivery quote system is highly adaptable and location-sensitive. It takes into account the precise delivery destination provided by the buyer. By doing so, it ensures that the pricing is not only accurate but also tailored to the specific location, reflecting real-world delivery costs.
 
 **Custom Pricing Options**: Additionally, the system offers a dynamic pricing model. Buyers can explore and select delivery options within the predefined price range. However, if a buyer's delivery requirements fall outside the custom price zone, they have the flexibility to request custom pricing. This feature accommodates unique delivery needs and fosters transparency in the pricing process.
+
+```mermaid
+graph TD
+    subgraph Dynamic Delivery
+        A[Dynamic Delivery] --> B[Purpose]
+        B --> C[Optional delivery<br/>for won items]
+
+        A --> D[Plugin]
+        D --> E[Calculates price<br/>estimates]
+
+        A --> F[Location-Based] 
+        F --> G[Accounts for<br/>delivery location]
+
+        A --> H[Pricing Options]
+        H --> I[Predefined range]
+        I --> J[Custom pricing]
+    end
+```
 
 # 8. Customized Alerts for Similar Vehicles
 
@@ -352,42 +515,80 @@ Admin's meticulous management of these features and functionalities contributes 
 Once you have completed the registration process, you will be able to log in to your account to add and manage your cars, make counteroffers, and participate in auctions.
 
 ```mermaid
+graph TD
+    subgraph Auction Functionality
+        A[Auction Functionality] --> B[Live Auction]
+        B --> C[Presentation Order]
+        C --> D[Individual item focus]
+        B --> E[Inactivity Timeout]
+        E --> F[Prevents delays]
+    end
+
+    subgraph Image Upload
+        A --> G[Image Upload]
+        G --> H[File Service Plugin]
+        H --> I[Seller image upload]
+    end
+
+    subgraph Search
+        A --> J[Search] 
+        J --> K[MeiliSearch Plugin]
+        K --> L[User search]
+
+        J --> M[Redis Caching]
+        M --> N[Performance]
+    end
+
+    subgraph Error Tracking
+        A --> O[Error Tracking]
+        O --> P[Sentry Plugins]
+        P --> Q[Issue monitoring]
+    end
+```
+
+```mermaid
 flowchart TB
-    A[User Registration] --> B{Buyer or Seller?}
-    B -- Buyer --> C[Browse Auctions]
-    C --> D[View Lot Details]
-    D --> E[Place Bid]
-    E --> F[Receive Outbid Notice]
-    F -- Yes, Rebid --> E
-    F -- No --> G[Sale Confirmation]
-    
-    B -- Seller --> H[List Vehicle]
-      H --> I[Provide Details]
-      I --> J[Upload Images]
-      J --> K[List in Auction]
-      
-      K --> L[View Bids Received]
-      L --> M{Accept Bid?}
-      M -- Yes --> N[Confirm Sale]
-      M -- No --> O[Make Counteroffer]
-      O --> P[Receive Counteroffer]
-      P --> Q{Accept Counter?}
+    subgraph User Registration
+        A[User Registration] --> B{Buyer or Seller?}
+    end
+
+    subgraph Buyer Flow
+        B -- Buyer --> C[Browse Auctions]
+        C --> D[View Lot Details]
+        D --> E[Place Bid]
+        E --> F[Receive Outbid Notice]
+        F -- Yes, Rebid --> E
+        F -- No --> G[Sale Confirmation]
+    end
+
+    subgraph Seller Flow
+        B -- Seller --> H[List Vehicle]
+        H --> I[Provide Details]
+        I --> J[Upload Images]
+        J --> K[List in Auction]
+        K --> L[View Bids Received]
+        L --> M{Accept Bid?}
+        M -- Yes --> N[Confirm Sale]
+        M -- No --> O[Make Counteroffer]
+        O --> P[Receive Counteroffer]
+        P --> Q{Accept Counter?}
         Q -- Yes --> N
         Q -- No --> R[Make New Counteroffer]
-          R --> L
-          
-    N --> S[Leave Feedback]  
-      
+        R --> L
+    end
+
+    subgraph Feedback Flow
+        N --> S[Leave Feedback]  
+    end
+
     A -.-> T[Bidding Rules]
     T ..-> E
     T ..-> O
     T ..-> R
-    
+
     U[Delivery Quote] --> G
     V[Search] --> C
-    
     W[Error Tracking] --> ALL
-
 ```
 
 
