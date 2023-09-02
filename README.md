@@ -109,6 +109,33 @@ graph TD
 
 When presenting Lots to customers on the storefront, administrators can specify the context, such as the customer's region or currency, dynamically. This dynamic context ensures that the correct pricing (initial bid amounts) is displayed for each customer, enhancing their shopping experience.
 
+```javascript
+metadata = {
+  "auctionStartDate": "2023-09-15",
+  "minimumBidAmount": 100,
+  // Add more custom attributes as required
+}
+
+metadata = {
+  "licensePlate": true,
+  "apkExpiryDate": "2025-10-01",
+  "napStatus": "Logisch",
+  // Add more custom attributes as required
+}
+
+prices = [
+  {
+    "currency_code": "USD",
+    "amount": 10000, // $100.00
+  },
+  {
+    "currency_code": "EUR",
+    "amount": 8500, // €85.00
+  },
+  // Add more pricing options as needed
+]
+```
+
 ## Bid Increment Rules for Developers
 
 In the context of auction functionality, administrators configure bid increment rules to dictate how bidding amounts progress during auctions. These rules establish a well-defined framework for bidding, ultimately elevating the overall auction experience. Here's a developer-centric breakdown of these rules:
@@ -161,6 +188,33 @@ graph TD
 
 In the realm of auction management, the dynamic configuration of maximum bids is pivotal for fostering a fair and controlled bidding environment. Here's an in-depth look at how administrators dynamically manage maximum bids:
 
+```javascript
+
+// You can define a JavaScript object to represent the dynamic bid configuration for a specific lot. Here's an example:
+
+const dynamicBidConfig = {
+  lotId: 123, // Unique identifier for the lot
+  estimatedValue: 1000, // Estimated value of the lot
+  currentMaximumBid: 1200, // Current maximum bid limit
+  administratorNotes: "Increase bid limit if needed.", // Optional notes for administrators
+};
+
+// This object allows you to store essential information about the dynamic bid configuration for a lot. You can update the 'currentMaximumBid' property as needed to adjust the maximum bid limit dynamically.
+
+// For progressive adjustment, you can use a function to calculate the new maximum bid limit based on market conditions, estimated value, and other factors. Here's a simplified example:
+
+function adjustMaximumBid(currentBid, estimatedValue) {
+  // Calculate a new maximum bid limit based on some logic
+  const newBidLimit = currentBid + 100; // Adjust it by $100 in this example
+  return newBidLimit;
+}
+
+// You can then use this function to update the 'currentMaximumBid' property:
+
+dynamicBidConfig.currentMaximumBid = adjustMaximumBid(dynamicBidConfig.currentMaximumBid, dynamicBidConfig.estimatedValue);
+
+```
+
 **Setting a Limit**: Administrators wield the flexibility to establish a maximum bid amount for each lot. This figure represents the highest bid that a buyer can place on a specific lot. The dynamic nature of this setup empowers administrators to tailor these limits as necessary, taking into account the unique characteristics of each lot and the evolving dynamics of the auction.
 
 _Example_: Imagine a rare collectible with an estimated value of $1,000. Administrators can dynamically set the maximum bid limit for this lot at $1,200 to ensure competitive bidding while preventing overextension.
@@ -207,6 +261,45 @@ graph TB
 
 Admin's role in shaping the bidding process is crucial to fostering a fair and transparent environment for both buyers and sellers within the Medusa JS project. Here's a comprehensive explanation of how this process unfolds:
 
+```javascript
+/**
+ * Example Schema for Bidding Process
+ */
+const biddingProcessSchema = {
+  reservePrice: {
+    description: "The minimum threshold price for each lot",
+    type: "number",
+    required: true,
+  },
+  counterBidding: {
+    description: "Enables negotiation between buyers and sellers",
+    type: "boolean",
+    default: true,
+  },
+  interactionLimits: {
+    description: "Admin-defined limits on negotiation interactions",
+    type: "object",
+    properties: {
+      maxInteractions: {
+        description: "Maximum allowed interactions per party",
+        type: "number",
+        default: 2,
+      },
+    },
+  },
+  // Add more schema properties as needed
+};
+
+// Usage Example
+const exampleBiddingProcess = {
+  reservePrice: 150,
+  counterBidding: true,
+  interactionLimits: {
+    maxInteractions: 3,
+  },
+  // Add more example data as required
+};
+```
 **Reserve Price: Setting the Floor**
 
 Admin establishes a minimum threshold known as the "reserve price" for each lot. This reserve price serves as the absolute minimum amount that must be reached during bidding for a lot to be considered sold. If the highest bid does not meet or exceed this reserve price, an alert is automatically sent to the seller. At this point, the seller has a pivotal decision to make: they can choose to accept the highest bid or decline it, as it falls short of their predetermined reserve price.
