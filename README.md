@@ -158,19 +158,7 @@ Admin's implementation of a dynamic delivery quote system plays a crucial role i
 
 # 8. Customized Alerts for Similar Vehicles
 
-Admin's implementation of a robust alert system adds significant value for buyers with specific preferences and interests. Here's a comprehensive overview of how this dynamic alert system is managed:
-
-**Alert Types**: Admin configures the alert system to provide buyers with a range of alert types, including options such as "Daily." Buyers have the freedom to choose their preferred alert type based on how frequently they wish to receive notifications.
-
-**Matching Criteria**: Buyers are empowered to define precise criteria for the lots they are interested in. This can include specific vehicle models, brands, or other relevant attributes. The alert system dynamically monitors newly listed lots and compares them against the buyer's criteria. When there's a match, the system promptly sends notifications to the buyer.
-
-**Customization**: Flexibility is a cornerstone of the alert system. Admin ensures that buyers can easily customize their alert preferences. This includes the ability to fine-tune their criteria, ensuring that they receive highly relevant notifications that align with their preferences.
-
-**Notification Delivery**: The alert system is designed for seamless communication. It delivers notifications to buyers through their chosen communication channels, be it email, SMS, or other preferred methods. This ensures that buyers stay informed about new lots that match their criteria in real-time.
-
-**Buyer Engagement**: Beyond convenience, the alert system actively encourages buyer engagement. By notifying buyers of relevant opportunities, it enhances their auction experience. Buyers are more likely to engage with the platform, participate in auctions, and make informed decisions, ultimately contributing to a vibrant and active auction community.
-
-**Integration with ListMonk Campaign API**: It's important to note that enrolling a client in a specific ListMonk campaign is part of this alert system's functionality. Admin ensures that relevant data is sent to the ListMonk Campaign API, allowing seamless coordination between the auction platform and ListMonk's campaign management, facilitating effective communication with buyers via email campaigns. This integration enhances the reach and impact of the alert system, ensuring that buyers receive timely and engaging notifications.
+To integrate the Marketing Campaign's snippet code into the frontend, all that's needed is to paste the provided code. We'll ensure that the design seamlessly integrates with the existing layout.
 
 # 9. Elevating User Registration and Authentication
 
